@@ -1,34 +1,20 @@
 def main():
     instructions = get_input()
     part1(instructions)
-    instructions = get_input_p2()
     part2(instructions)
 
 def get_input():
     instructions = []
     f = open("input.txt", "r")
     for line in f:
-        line_len_half = int(len(line.strip())/2)
-        instructions.append([(line.strip()[:line_len_half]), (line.strip()[line_len_half:])])
-    return instructions
-
-def get_input_p2():
-    instructions = []
-    f = open("input.txt", "r")
-    triplet = []
-    for line in f:
-        if len(triplet) == 3:
-            instructions.append(triplet)
-            triplet = []
-            triplet.append(line.strip())
-        else:
-            triplet.append(line.strip())
-    instructions.append(triplet)
+        instructions.append(line.strip())
     return instructions
 
 def part1(instructions):
     all_matches = []
-    for pair in instructions:
+    for line in instructions:
+        line_len_half = int(len(line.strip())/2)
+        pair = [(line.strip()[:line_len_half]), (line.strip()[line_len_half:])]
         pair_matches = find_pair_matches(pair)
         for elem in pair_matches:
             all_matches.append(elem)
@@ -38,7 +24,9 @@ def part1(instructions):
 
 def part2(instructions):
     matching_values = 0
-    for triplet in instructions:
+    list_of_figures = [i for i in range(len(instructions)) if i%3 == 0]
+    for i in list_of_figures:
+        triplet = [instructions[i], instructions[i+1], instructions[i+2]]
         triplet_overlap = set()
         for elem in triplet[0]:
             if elem in triplet[1] and elem in triplet[2]:
