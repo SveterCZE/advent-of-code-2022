@@ -8,7 +8,7 @@ def get_input():
     instructions = []
     f = open("input.txt", "r")
     for line in f:
-        pair1, pair2 = line.strip().split(",")[0].split("-"), line.strip().split(",")[1].split("-") 
+        pair1, pair2 = [int(i) for i in line.strip().split(",")[0].split("-")], [int(i) for i in line.strip().split(",")[1].split("-")] 
         instructions.append([pair1, pair2])
     return instructions
 
@@ -22,10 +22,10 @@ def part1(instructions):
 
 def overlaps(checked_pair):
     # Alternative 1 - first fully contains the second
-    if int(checked_pair[0][0]) <= int(checked_pair[1][0]) and int(checked_pair[0][1]) >= int(checked_pair[1][1]):
+    if checked_pair[0][0] <= checked_pair[1][0] and checked_pair[0][1] >= checked_pair[1][1]:
         return True
     # Alternative 2 - second fully contains the first
-    elif int(checked_pair[1][0]) <=  int(checked_pair[0][0]) and int(checked_pair[1][1]) >= int(checked_pair[0][1]):
+    elif checked_pair[1][0] <= checked_pair[0][0] and checked_pair[1][1] >= checked_pair[0][1]:
         return True
     else:
         return False
@@ -39,13 +39,13 @@ def part2(instructions):
     return 0
 
 def overlaps_p2(checked_pair):
-    if int(checked_pair[0][0]) >= int(checked_pair[1][0]) and int(checked_pair[0][0]) <= int(checked_pair[1][1]):
+    if checked_pair[0][0] >= checked_pair[1][0] and checked_pair[0][0] <= checked_pair[1][1]:
         return True
-    elif int(checked_pair[0][1]) >= int(checked_pair[1][0]) and int(checked_pair[0][1]) <= int(checked_pair[1][1]):
+    elif checked_pair[0][1] >= checked_pair[1][0] and checked_pair[0][1] <= checked_pair[1][1]:
         return True
-    elif int(checked_pair[1][0]) >= int(checked_pair[0][0]) and int(checked_pair[1][0]) <= int(checked_pair[0][1]):
+    elif checked_pair[1][0] >= checked_pair[0][0] and checked_pair[1][0] <= checked_pair[0][1]:
         return True
-    elif int(checked_pair[1][1]) >= int(checked_pair[0][0]) and int(checked_pair[1][1]) <= int(checked_pair[0][1]):
+    elif checked_pair[1][1] >= checked_pair[0][0] and checked_pair[1][1] <= checked_pair[0][1]:
         return True
     else:
         return False
