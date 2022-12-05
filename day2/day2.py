@@ -96,5 +96,4 @@ def calculate_match_score(pair):
         elif pair[1] == "B":
             return 0
 
-
 main()
