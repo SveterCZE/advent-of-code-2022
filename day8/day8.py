@@ -3,7 +3,6 @@ def main():
     part1(instructions)
     part2(instructions)
 
-
 def get_input():
     instructions = []
     f = open("input.txt", "r")
@@ -36,12 +35,10 @@ def is_good_tree(instructions, tree_coordinate):
             left_ok = False
     # Right
     for i in range(tree_coordinate[1] + 1, len(instructions[1])):
-        # print("Right check. Checked tree:", checked_tree_height, "right trees:", instructions[tree_coordinate[0]][i])
         if instructions[tree_coordinate[0]][i] >= checked_tree_height:
             right_ok = False
     # Top
     for i in range(0, tree_coordinate[0]):
-        # print("Top check. Checked tree:", checked_tree_height, "top trees:", instructions[i][tree_coordinate[1]])
         if instructions[i][tree_coordinate[1]] >= checked_tree_height:
             top_ok = False
 
@@ -51,7 +48,6 @@ def is_good_tree(instructions, tree_coordinate):
             down_ok = False
 
     return left_ok or right_ok or top_ok or down_ok
-
 
 def part2(instructions):
     best_scenic_score = 0
@@ -64,7 +60,6 @@ def part2(instructions):
     return 0 
 
 def calculate_scenic_score(instructions, tree_coordinate):
-
     checked_tree_height = instructions[tree_coordinate[0]][tree_coordinate[1]]
     # Left
     left_list = []
@@ -109,8 +104,5 @@ def calculate_scenic_score(instructions, tree_coordinate):
             break
 
     return left_score * right_score * top_score * down_score
-
-
-
 
 main()
