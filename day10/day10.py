@@ -1,7 +1,6 @@
 def main():
     instructions = get_input()
     part1(instructions)
-    part2(instructions)
 
 def get_input():
     instructions = []
@@ -21,36 +20,27 @@ def part1(instructions):
     lit_pixels = []
     for elem in instructions:
         if elem[0] == "noop":    
-            activate_pixels(lit_pixels, X_register_value, turn_count)
-            turn_count += 1
-            if is_relevant_turn(turn_count):
-                relevant_values.append(X_register_value * turn_count)
+            turn_count = perform_one_step(lit_pixels, X_register_value, turn_count, relevant_values)
         elif elem[0] == "addx":
-            
-            activate_pixels(lit_pixels, X_register_value, turn_count)
-            
-            turn_count += 1
-            if is_relevant_turn(turn_count):
-                relevant_values.append(X_register_value * turn_count)
-            
-            activate_pixels(lit_pixels, X_register_value, turn_count)
-            
-            turn_count += 1
-            if is_relevant_turn(turn_count):
-                relevant_values.append(X_register_value * turn_count)
+            turn_count = perform_one_step(lit_pixels, X_register_value, turn_count, relevant_values)
+            turn_count = perform_one_step(lit_pixels, X_register_value, turn_count, relevant_values)
             X_register_value += elem[1]
     print(sum(relevant_values))
     print_lit_pixels(lit_pixels)
     return 0
+
+def perform_one_step(lit_pixels, X_register_value, turn_count, relevant_values):
+    activate_pixels(lit_pixels, X_register_value, turn_count)
+    turn_count += 1
+    if is_relevant_turn(turn_count):
+        relevant_values.append(X_register_value * turn_count)
+    return turn_count
 
 def activate_pixels(lit_pixels, X_register_value, turn_count):
     if is_sprite_active(X_register_value, turn_count):
         lit_pixels.append("█")
     else:
         lit_pixels.append(" ")
-
-def part2(instructions):
-    pass
 
 def is_relevant_turn(turn_count):
     if (turn_count + 20) % 40 == 0:
