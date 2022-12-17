@@ -1,5 +1,3 @@
-import copy
-
 def main():
     instructions = get_input()
     part1(instructions)
@@ -44,7 +42,6 @@ def part2(instructions):
                 temp_result = go_deeper(instructions, currently_explored_coordinates, visited_coordinates, step_count, target_coord)
                 if temp_result < shortest_journey:
                     shortest_journey = temp_result
-                    print("Current shortest:", shortest_journey)
     print(shortest_journey)
     return 0
 
