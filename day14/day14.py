@@ -83,7 +83,7 @@ def part2(barriers):
     print(sand_count)
 
 def generate_floor(floor_level, barriers):
-    for i in range (-100000, 100000):
+    for i in range (-20000, 20000):
         barriers.add((i, floor_level))
 
 main()
