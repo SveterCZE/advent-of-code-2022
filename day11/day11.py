@@ -5,7 +5,7 @@ def main():
 
 def get_input():
     instructions = []
-    f = open("input.txt", "r")
+    f = open("sample.txt", "r")
     temp_moneky = Monkey()
     for line in f:
         temp_line = line.strip().split()
@@ -45,11 +45,12 @@ def part1(instructions, division_switch, round_count):
     monkey_results = []
     for checked_monkey in instructions:
         monkey_results.append(checked_monkey.items_inspected)
+    print(monkey_results)
     monkey_results.sort()
     print(monkey_results[-1] * monkey_results[-2])
     return 0
 
-    
+
 class Monkey():
     def __init__(self):
         self.list_of_items = []
@@ -81,9 +82,15 @@ class Monkey():
                 worry_level = worry_level // 3
             # return updated item and target monkey
             if worry_level % self.test_value == 0:
-                return worry_level, self.true_target
+                if division_switch == True:
+                    return worry_level, self.true_target
+                else:
+                    return worry_level, self.true_target
             else:
-                return worry_level, self.false_target
+                if division_switch == True:
+                    return worry_level, self.false_target
+                else:
+                    return worry_level, self.true_target
 
 
 main()
