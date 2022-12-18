@@ -3,6 +3,7 @@ import ast
 def main():
     instructions = get_input()
     part1(instructions)
+    instructions = get_input()
     part2(instructions)
 
 def get_input():
@@ -24,7 +25,6 @@ def part1(instructions):
     for i in range(len(instructions)):
         pair_valid = check_pair_valid(instructions[i])
         if pair_valid == True:
-            print(instructions[i])
             valid_pairs.append(i + 1)
     print(sum(valid_pairs))
     return 0
@@ -68,6 +68,42 @@ def check_pair_valid(checked_pair):
             return True
 
 def part2(instructions):
-    pass
+    individual_packets = []
+    # Clean instructions
+    for elem in instructions:
+        individual_packets.append(elem[0])
+        individual_packets.append(elem[1])
+    
+    divider1 = ast.literal_eval("[[2]]")
+    divider2 = ast.literal_eval("[[6]]")
+    individual_packets.append(divider1)
+    individual_packets.append(divider2)
+
+    instructions = sort_instructions(individual_packets)
+    index_values = []
+    for i in range(len(instructions)):
+        print(i + 1, " ... ", instructions[i])
+        if instructions[i] == divider1 or instructions[i] == divider2:
+            index_values.append(i + 1)
+    print(index_values)
+    print(index_values[0] * index_values[1])
+    return 0
+
+def sort_instructions(initial_instructions):
+    sorted_instructions = []
+    sorted_instructions.append(initial_instructions[0])
+    for i in range(1, len(initial_instructions)):
+        inserted_item = initial_instructions[i]
+        sorted_instructions = insert_item_into_sorted_list(sorted_instructions, inserted_item)
+    return sorted_instructions
+
+def insert_item_into_sorted_list(sorted_instructions, inserted_item):
+    for i in range(len(sorted_instructions)):
+        checked_pair = [inserted_item, sorted_instructions[i]]
+        if check_pair_valid(checked_pair):
+            sorted_instructions.insert(i, inserted_item)
+            return sorted_instructions
+    sorted_instructions.append(inserted_item)
+    return sorted_instructions
 
 main()
