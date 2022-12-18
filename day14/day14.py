@@ -34,30 +34,30 @@ def part1(barriers):
     while True:
         sand_count += 1
         sand_item_coordinate = (500,0)
-        falling_into_abbyss = make_sand_fall(sand_item_coordinate, barriers, lowest_coordinate, True)
-        if falling_into_abbyss == True:
+        falling_into_abyss = make_sand_fall(sand_item_coordinate, barriers, lowest_coordinate, True)
+        if falling_into_abyss == True:
             break
     print(sand_count - 1)
     return 0
 
-def make_sand_fall(initial_coordinate, barriers, lowest_coordinate, abbyss_check = True):
+def make_sand_fall(initial_coordinate, barriers, lowest_coordinate, abyss_check = True):
     checked_coordinate = (initial_coordinate[0], initial_coordinate[1] + 1)
     # Check if falling into abbyss
-    if checked_coordinate[1] > lowest_coordinate and abbyss_check == True:
+    if checked_coordinate[1] > lowest_coordinate and abyss_check == True:
         return True
 
     if checked_coordinate not in barriers:
-        return make_sand_fall(checked_coordinate, barriers, lowest_coordinate, abbyss_check)
+        return make_sand_fall(checked_coordinate, barriers, lowest_coordinate, abyss_check)
 
     # if the next possible coordinate is bloocked, check alternative to left
     elif checked_coordinate in barriers:
         left_checked_coordinate = (initial_coordinate[0] - 1, initial_coordinate[1] + 1)
         if left_checked_coordinate not in barriers:
-            return make_sand_fall(left_checked_coordinate, barriers, lowest_coordinate, abbyss_check)
+            return make_sand_fall(left_checked_coordinate, barriers, lowest_coordinate, abyss_check)
         else:
             right_checked_coordinate = (initial_coordinate[0] + 1, initial_coordinate[1] + 1)
             if right_checked_coordinate not in barriers:
-                return make_sand_fall(right_checked_coordinate, barriers, lowest_coordinate, abbyss_check)
+                return make_sand_fall(right_checked_coordinate, barriers, lowest_coordinate, abyss_check)
             else:
                 barriers.add(initial_coordinate)
                 return False
