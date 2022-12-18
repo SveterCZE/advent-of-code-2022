@@ -82,10 +82,8 @@ def part2(instructions):
     instructions = sort_instructions(individual_packets)
     index_values = []
     for i in range(len(instructions)):
-        print(i + 1, " ... ", instructions[i])
         if instructions[i] == divider1 or instructions[i] == divider2:
             index_values.append(i + 1)
-    print(index_values)
     print(index_values[0] * index_values[1])
     return 0
 
