@@ -1,7 +1,7 @@
 def main():
     instructions = get_input()
-    part1(instructions, True, 20)
-    part1(instructions, False, 10000)
+    # part1(instructions, True, 20)
+    part1(instructions, False, 20)
 
 def get_input():
     instructions = []
@@ -45,9 +45,12 @@ def part1(instructions, division_switch, round_count):
     monkey_results = []
     for checked_monkey in instructions:
         monkey_results.append(checked_monkey.items_inspected)
-    print(monkey_results)
     monkey_results.sort()
-    print(monkey_results[-1] * monkey_results[-2])
+    monkey_business = monkey_results[-1] * monkey_results[-2]
+    print(monkey_business)
+    # if monkey_business == 10197:
+    #     print(divisor)
+    #     return
     return 0
 
 
@@ -80,6 +83,10 @@ class Monkey():
             if division_switch == True:
             # Divide worry level
                 worry_level = worry_level // 3
+            
+            # else:
+            #     worry_level = worry_level % divisor
+            
             # return updated item and target monkey
             if worry_level % self.test_value == 0:
                 if division_switch == True:
@@ -90,7 +97,7 @@ class Monkey():
                 if division_switch == True:
                     return worry_level, self.false_target
                 else:
-                    return worry_level, self.true_target
+                    return worry_level, self.false_target
 
 
 main()
