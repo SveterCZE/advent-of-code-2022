@@ -48,7 +48,37 @@ def make_tile_fall(tiles, instructions, instruction_counter, highest_point, rest
     return highest_point, instruction_counter
 
 def part2(tiles, instructions):
-    pass
+    rep_highest_point, rep_tile_counter, rep_instruction_remainder = find_repeating_pattern(tiles, instructions)
+    target_tile_numbers = 1000000000000
+    repetitions = target_tile_numbers // rep_tile_counter
+    repetitions -= 1
+    remainder = target_tile_numbers % rep_tile_counter
+    repeated_chunk_size = repetitions * rep_highest_point
+    
+    # Simulate one round plus remaineder
+    tile_counter = 0
+    highest_point = -1
+    instruction_counter = 0
+    resting_tiles = set()
+    for i in range(rep_tile_counter + remainder):
+        highest_point, instruction_counter = make_tile_fall(tiles, instructions, instruction_counter, highest_point, resting_tiles, tile_counter)
+        tile_counter += 1
+    print(highest_point + repeated_chunk_size + 1)
+    return 0
+
+
+def find_repeating_pattern(tiles, instructions):
+    tile_counter = 0
+    highest_point = -1
+    instruction_counter = 0
+    resting_tiles = set()
+    # Find the repetition pattern
+    while True:
+        highest_point, instruction_counter = make_tile_fall(tiles, instructions, instruction_counter, highest_point, resting_tiles, tile_counter)
+        tile_counter += 1
+        instruction_remainder = instruction_counter % len(instructions)
+        if instruction_remainder <= 5 and instruction_counter > 5:
+            return highest_point, tile_counter, instruction_remainder
 
 def determine_higest_point(selected_tile, highest_point):
     for elem in selected_tile:
