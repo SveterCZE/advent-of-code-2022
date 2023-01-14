@@ -1,5 +1,3 @@
-import copy
-
 def main():
     tiles, instructions  = get_input()
     part1(tiles, instructions)
