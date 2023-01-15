@@ -5,7 +5,7 @@ def main():
     valve_flow, valve_map = get_input()
     simplified_distance_map = modify_valve_map(valve_flow, valve_map)
     part1(valve_flow, simplified_distance_map, 30)
-    # part2(valve_flow, simplified_distance_map)
+    part2(valve_flow, simplified_distance_map, 26)
     # part3(valve_flow, simplified_distance_map)
 
 def get_input():
@@ -66,6 +66,25 @@ def part1(valve_flow, simplified_distance_map, time_limit):
     print(count_best_score(completed_journeys))
     return 0
 
+def part2(valve_flow, simplified_distance_map, time_limit):
+    # Initialise the player priority queue
+    completed_journeys_player, jouney_pq = initialise_the_pq(simplified_distance_map, valve_flow, time_limit)
+    # Explore the remaining options
+    explore_the_pq(jouney_pq, completed_journeys_player, simplified_distance_map, valve_flow, time_limit)
+    completed_journeys_player.sort()
+    # Reduce the list of completed_journeys --- Extend the list if incorrect solution is being rendered
+    completed_journeys_player = completed_journeys_player[:5000]
+    # Iterate over journeys completed by the player and analyse potential routes taken by the elephant
+    best_completed_journey = 0
+    for completed_player_journey in completed_journeys_player:
+        completed_journeys_elephant, jouney_pq = initialise_the_pq(simplified_distance_map, valve_flow, time_limit, completed_player_journey[3][1:])
+        explore_the_pq(jouney_pq, completed_journeys_elephant, simplified_distance_map, valve_flow, time_limit)
+        alternative_best_score = count_best_score(completed_journeys_elephant)
+        if alternative_best_score + completed_player_journey[1] > best_completed_journey:
+            best_completed_journey = alternative_best_score + completed_player_journey[1]
+    print(best_completed_journey)
+    return 0
+
 def count_best_score(completed_journeys):
     best_score = 0
     best_item = None
@@ -75,17 +94,24 @@ def count_best_score(completed_journeys):
             best_item = elem
     return best_item[1]
 
-def initialise_the_pq(simplified_distance_map, valve_flow, time_limit):
+def initialise_the_pq(simplified_distance_map, valve_flow, time_limit, previous_jounrey = None):
     completed_journeys = []
     jouney_pq = queue.PriorityQueue()
     # Feed the PQ the initial possible options
     for possible_initial_destinations in simplified_distance_map["AA"]:
-        steps_taken = possible_initial_destinations[1] + 1
-        pressure_release = (time_limit - steps_taken) * valve_flow[possible_initial_destinations[0]]
-        journey = ["AA"]
-        journey.append(possible_initial_destinations[0])
-        item = [-pressure_release, pressure_release, steps_taken, journey]
-        jouney_pq.put(item)
+        if previous_jounrey != None and possible_initial_destinations[0] in previous_jounrey:
+            continue
+        else:
+            steps_taken = possible_initial_destinations[1] + 1
+            pressure_release = (time_limit - steps_taken) * valve_flow[possible_initial_destinations[0]]
+            if previous_jounrey != None:
+                journey = copy.deepcopy(previous_jounrey)
+            else:
+                journey = []
+            journey.append("AA")
+            journey.append(possible_initial_destinations[0])
+            item = [-pressure_release, pressure_release, steps_taken, journey]
+            jouney_pq.put(item)
     return completed_journeys, jouney_pq
 
 def explore_the_pq(jouney_pq, completed_journeys, simplified_distance_map, valve_flow, time_limit):
