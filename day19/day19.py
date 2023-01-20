@@ -107,10 +107,10 @@ def generate_new_possible_states(instructions, checked_state, maxima):
             possible_new_states.append(newly_created_state)
             robot_built = True
         # Nothing can be built --- just extract resources
-        if robot_built == False:
-            newly_created_state = copy.deepcopy(checked_state)
-            newly_created_state = extract_resouces(newly_created_state)
-            possible_new_states.append(newly_created_state)
+        # if robot_built == False:
+        newly_created_state = copy.deepcopy(checked_state)
+        newly_created_state = extract_resouces(newly_created_state)
+        possible_new_states.append(newly_created_state)
         return possible_new_states
 
 def extract_resouces(newly_created_state):
@@ -141,14 +141,14 @@ def prune_the_states_list(current_states_list, rounds_passed):
 def prune_the_states_list_v2(current_states_list):
     max_geode_robot = 0
     for elem in current_states_list:
-        if elem[6] > max_geode_robot:
-            max_geode_robot = elem[6]
+        if elem[7] > max_geode_robot:
+            max_geode_robot = elem[7]
     if max_geode_robot == 0:
         return current_states_list
     else:
         pruned_list = []
         for elem in current_states_list:
-            if elem[6] != max_geode_robot:
+            if elem[7] != max_geode_robot:
                 pruned_list.append(elem)
         return pruned_list
 
