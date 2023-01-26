@@ -6,7 +6,6 @@ def main():
     simplified_distance_map = modify_valve_map(valve_flow, valve_map)
     part1(valve_flow, simplified_distance_map, 30)
     part2(valve_flow, simplified_distance_map, 26)
-    # part3(valve_flow, simplified_distance_map)
 
 def get_input():
     valve_flow = {}

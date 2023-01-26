@@ -39,15 +39,15 @@ def count_external_area(instructions, outer_fill):
 
 def fill_area(outer_fill, instructions, min_x, min_y, min_z, max_x, max_y, max_z):
     initial_coordinate = (min_x, min_y, min_z)
-    list_of_coordinates = []
-    list_of_coordinates.append(initial_coordinate)
+    list_of_coordinates = set()
+    list_of_coordinates.add(initial_coordinate)
     while len(list_of_coordinates) != 0:
         checked_coordinate = list_of_coordinates.pop()
         outer_fill.add(checked_coordinate)
         valid_neighbouring_coordinates = generate_valid_neighbours(checked_coordinate, instructions, min_x, min_y, min_z, max_x, max_y, max_z)
         for elem in valid_neighbouring_coordinates:
             if elem not in outer_fill:
-                list_of_coordinates.append(elem)
+                list_of_coordinates.add(elem)
     return 0
 
 def generate_valid_neighbours(checked_coordinate, instructions, min_x, min_y, min_z, max_x, max_y, max_z):
