@@ -1,10 +1,16 @@
 import re
 import copy
+import time
 
 def main():
     instructions  = get_input()
+    st = time.time()
     part1(instructions, 24)
+    pt1 = time.time()
+    print('Execution time, part 1:', pt1 - st, 'seconds')
     part2(instructions[:3], 32)
+    pt2 = time.time()
+    print('Execution time, part 2:', pt2 - pt1, 'seconds')
 
 def get_input():
     instructions = []
@@ -67,27 +73,27 @@ def generate_new_possible_states(instructions, checked_state, maxima, remaining_
         newly_created_state[5] -= instructions[5]
         newly_created_state = extract_resouces(newly_created_state)
         newly_created_state[6] += 1
+        reduce_excessive_resources(newly_created_state, maxima, remaining_rounds)
         possible_new_states.append(newly_created_state)
         return possible_new_states
     # Option 2 --- Try building other robots, unless their maximum was reached
     else:
-        robot_built = False
         # Check if ore robot can be bulit
         if checked_state[1] >= instructions[0] and checked_state[0] != maxima["ore"] and remaining_rounds > 2:
             newly_created_state = copy.deepcopy(checked_state)
             newly_created_state[1] -= instructions[0]
             newly_created_state = extract_resouces(newly_created_state)
             newly_created_state[0] += 1
+            reduce_excessive_resources(newly_created_state, maxima, remaining_rounds)
             possible_new_states.append(newly_created_state)
-            robot_built = True
         # Check if clay robot can be built
         if checked_state[1] >= instructions[1] and checked_state[2] != maxima["clay"] and remaining_rounds > 2:
             newly_created_state = copy.deepcopy(checked_state)
             newly_created_state[1] -= instructions[1]
             newly_created_state = extract_resouces(newly_created_state)
             newly_created_state[2] += 1
+            reduce_excessive_resources(newly_created_state, maxima, remaining_rounds)
             possible_new_states.append(newly_created_state)
-            robot_built = True
         # Check if obsidian robot can be built
         if checked_state[1] >= instructions[2] and checked_state[3] >= instructions[3] and checked_state[4] != maxima["obsidian"] and remaining_rounds > 2:
             newly_created_state = copy.deepcopy(checked_state)
@@ -95,12 +101,12 @@ def generate_new_possible_states(instructions, checked_state, maxima, remaining_
             newly_created_state[3] -= instructions[3]
             newly_created_state = extract_resouces(newly_created_state)
             newly_created_state[4] += 1
+            reduce_excessive_resources(newly_created_state, maxima, remaining_rounds)
             possible_new_states.append(newly_created_state)
-            robot_built = True
         # Nothing can be built --- just extract resources
-        # if robot_built == False:
         newly_created_state = copy.deepcopy(checked_state)
         newly_created_state = extract_resouces(newly_created_state)
+        reduce_excessive_resources(newly_created_state, maxima, remaining_rounds)
         possible_new_states.append(newly_created_state)
         return possible_new_states
 
@@ -125,6 +131,12 @@ def prune_badly_performing_states(current_states_list, remaining_rounds):
         else:
             viable_states.append(checked_state)
     return viable_states
+
+def reduce_excessive_resources(newly_created_state, maxima, remaining_rounds):
+    newly_created_state[1] = min(newly_created_state[1], maxima["ore"] + (maxima["ore"] - newly_created_state[0]) * remaining_rounds)
+    newly_created_state[3] = min(newly_created_state[3], maxima["clay"] + (maxima["clay"] - newly_created_state[2]) * remaining_rounds)
+    newly_created_state[5] = min(newly_created_state[5], maxima["obsidian"] + (maxima["obsidian"] - newly_created_state[4]) * remaining_rounds)
+    return newly_created_state
 
 def determine_maxima(checked_instructions):
     maxima = {}
